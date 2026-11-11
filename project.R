@@ -1,6 +1,5 @@
 ## Tsithembile Tembo 
-## Partner Name 
-## CSP 571 
+
 
 #loading data and looking at dataset 
 diabetes <- read.csv("diabetes.csv")

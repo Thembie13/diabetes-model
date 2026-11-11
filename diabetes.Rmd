@@ -1,0 +1,72 @@
+---
+title: "diabetes"
+author: "Tsithembile Tembo"
+date: "2026-11-02"
+output: pdf_document
+---
+
+Question: Predict whether a patient has diabetes(1) or no diabetes(0)
+
+1. loading data and looking at dataset get
+```{r} 
+#loading data and looking at dataset get
+diabetes <- read.csv("diabetes.csv")
+head(diabetes)
+```
+```{r}
+str(diabetes)
+dim(diabetes)
+```
+
+2. clean data 
+```{r}
+#number of duplicates 
+#there is no need for duplicates with patients; dont want to have unecessary data 
+sum(is.na(diabetes))
+```
+3. which features are the most significant (INFERENCE)
+```{r} 
+#fit all data 
+all.fit <- glm(Diabetes_binary ~ ., data = diabetes, family = binomial)
+summary(all.fit)
+```
+- based on signif. codes NoDocbcCost and Smoker are not significant 
+```{r}
+#remove NoDocbcCost and Smoker 
+diabetes$Smoker <- NULL
+diabetes$NoDocbcCost <- NULL
+colnames(diabetes)
+```
+
+4. logistic regression (PREDICTIVE)
+```{r}
+#split training and testing data, 50 percent
+set.seed(13)
+train <- sample(1:nrow(diabetes), nrow(diabetes) * 0.5)
+train.data <- diabetes[train, ]
+test.data <- diabetes[-train, ]
+
+glm.fit <- glm(Diabetes_binary ~ ., data = train.data, family = binomial)
+summary(glm.fit)
+```
+```{r}
+# predict on testing data 
+glm.probs <- predict(glm.fit, test.data, type = "response")
+glm.pred <- rep(0, nrow(test.data))
+glm.pred[glm.probs > .5] <- 1
+```
+
+5. Evaluate Model 
+```{r} 
+mean(glm.pred != test.data$Diabetes_binary)
+table(Predicted = glm.pred, Actual = test.data$Diabetes_binary)
+```
+TN: 106,750
+TP: 2,381 
+FN: 14,993
+FP: 2,716
+
+Inbalances in the number of cases for postive and negative. It matters more to get TP than TN, due to wanting to find out more wether soemone has diabetes than if they do not. 
+
+
+
