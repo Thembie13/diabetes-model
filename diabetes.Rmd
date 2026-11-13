@@ -2,7 +2,7 @@
 title: "diabetes"
 author: "Tsithembile Tembo"
 date: "2026-11-02"
-output: pdf_document
+output: github_document
 ---
 
 Question: Predict whether a patient has diabetes(1) or no diabetes(0)
@@ -10,7 +10,7 @@ Question: Predict whether a patient has diabetes(1) or no diabetes(0)
 1. loading data and looking at dataset get
 ```{r} 
 #loading data and looking at dataset get
-diabetes <- read.csv("diabetes.csv")
+diabetes <- read.csv("/Users/thembie/Desktop/diabetes.csv")
 head(diabetes)
 ```
 ```{r}
@@ -67,6 +67,19 @@ FN: 14,993
 FP: 2,716
 
 Inbalances in the number of cases for postive and negative. It matters more to get TP than TN, due to wanting to find out more wether soemone has diabetes than if they do not. 
+```{r}
+# plot the number of 0 and the and the numebr of ones 
 
+#count 1's and 0's 
+counts <- table(diabetes$Diabetes_binary)
 
+barplot(height=counts, 
+        col="#69b3a2",
+        xlab="amount",
+        ylab="cases",
+        main="Diabetes: Yes(1) or No(0)",
+        horiz=T, las=1)
+```
+
+Even if we split the training data in half, the training data is trained  on more negative cases than the positive cases.In this case the model is more trained for idenitfying 0's than 1's. What matters more diagnosing a positive or negative case of diabetes? Diagnosing a Positive Case!  
 
